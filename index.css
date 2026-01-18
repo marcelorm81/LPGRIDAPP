@@ -1,0 +1,304 @@
+
+:root {
+  --lp-bg-color: #F4F0EA;
+  --lp-text-color: #1a1a1a;
+  --lp-primary-accent: #735a43;
+  --lp-secondary-accent: #d9d1c7;
+  --lp-border-color: #e5e0d8;
+  --lp-grid-bg: #f8f5f0; 
+  --lp-cta-color: #a35c4e;
+  
+  --lp-font-main: "Optima", "Candara", "Noto Sans", "source-sans-pro", "Segoe UI", sans-serif;
+  --floating-z-index: 500;
+  
+  --tile-height: 400px;
+  --tile-width: 300px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--lp-bg-color);
+  touch-action: none;
+}
+
+body {
+  font-family: var(--lp-font-main);
+  color: var(--lp-text-color);
+  -webkit-font-smoothing: antialiased;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.image-grid-viewport {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--lp-bg-color);
+  cursor: grab;
+  perspective: 1200px;
+}
+
+.image-grid-viewport:active {
+  cursor: grabbing;
+}
+
+.image-grid-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.image-tile {
+  position: absolute;
+  border-radius: 1px;
+  overflow: hidden;
+  background-color: var(--lp-bg-color); /* Match app background */
+  backface-visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateZ(0);
+}
+
+.image-tile img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  pointer-events: none;
+}
+
+.focus-metadata-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: calc((var(--tile-height) * 1.25 / 2) + 12px);
+  z-index: var(--floating-z-index);
+  text-align: center;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 380px;
+}
+
+.floating-product-info {
+  margin-bottom: 12px;
+}
+
+.floating-product-info h3 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  margin-bottom: 2px;
+  color: #111;
+}
+
+.floating-product-info .price {
+  font-size: 0.8rem;
+  color: #888;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+
+.cta-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+.find-similar-btn-floating {
+  background: var(--lp-cta-color);
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 2px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  font-family: var(--lp-font-main);
+  letter-spacing: 0.03em;
+}
+
+.circle-nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.08);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: var(--lp-cta-color);
+  transition: all 0.2s ease;
+}
+
+.circle-nav-btn svg {
+  width: 13px;
+  height: 13px;
+  stroke-width: 2.5px;
+}
+
+.search-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: white;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* --- Instruction Overlay Styles --- */
+
+.instruction-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(244, 240, 234, 0.2); /* Very subtle page dim */
+  backdrop-filter: blur(4px); 
+  -webkit-backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+.instruction-card {
+  position: relative;
+  width: 300px;
+  height: 306px; /* Matches aspect ratio of the corner svg roughly (500x510) */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  /* Enhanced Glass Effect - Much more white and blur */
+  background: linear-gradient(
+    135deg, 
+    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(255, 255, 255, 0.6) 100%
+  );
+  
+  backdrop-filter: blur(60px);
+  -webkit-backdrop-filter: blur(60px);
+  
+  border-radius: 12px;
+  
+  /* Reflective Border */
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.9);
+  border-left: 1px solid rgba(255, 255, 255, 0.9);
+  
+  box-shadow: 
+    0 30px 60px -12px rgba(115, 90, 67, 0.25),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    
+  color: #9D5248;
+}
+
+.instruction-frame {
+  position: absolute;
+  top: 15px; 
+  left: 15px; 
+  right: 15px; 
+  bottom: 15px;
+  pointer-events: none;
+  opacity: 1;
+}
+
+.instruction-frame svg {
+  width: 100%;
+  height: 100%;
+}
+
+.instruction-content {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.instruction-hand {
+  width: 28px; /* Significantly smaller than before (was 44px) */
+  height: auto;
+  color: #9D5248;
+  margin-bottom: 12px;
+}
+
+.instruction-hand svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.instruction-content p {
+  font-family: var(--lp-font-main);
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  color: #9D5248;
+}
+
+@media (max-width: 768px) {
+  .focus-metadata-container {
+    width: 90vw;
+    margin-top: calc((var(--tile-height) * 1.22 / 2) + 12px);
+  }
+  .floating-product-info h3 {
+    font-size: 0.95rem;
+  }
+  .floating-product-info .price {
+    font-size: 0.7rem;
+  }
+  .find-similar-btn-floating {
+    padding: 8px 16px;
+    font-size: 0.7rem;
+  }
+  .circle-nav-btn {
+    width: 32px;
+    height: 32px;
+  }
+  .circle-nav-btn svg {
+    width: 11px;
+    height: 11px;
+  }
+  
+  .instruction-card {
+    width: 260px;
+    height: 265px;
+  }
+  .instruction-frame {
+    top: 12px; left: 12px; right: 12px; bottom: 12px;
+  }
+  .instruction-content p {
+    font-size: 0.95rem;
+  }
+}
